@@ -1,0 +1,127 @@
+﻿@model Model.EntityFramework.Vouchers
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex">
+    <h3 class="mr-auto p-2">DETAIL VOUCHER</h3>
+    <div class="p-2">@Html.ActionLink("Edit", "Edit", new { id = Model.id }, new { @class = "btn btn-success" })</div>
+    <div class="p-2">@Html.ActionLink("Back", "Index", null, new { @class = "btn btn-danger" })</div>
+</div>
+
+<div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Detail</h6>
+        </div>
+        <div class="card-body">
+            <div class="container d-flex justify-content-center">
+                <div class="form-horizontal col-md-10">
+
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.code)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.code)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.name)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.name)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.description)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.description)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.uses)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.uses)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.max_uses)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.max_uses)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.max_uses_user)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.max_uses_user)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.type)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.type)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.discount_amount)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.discount_amount)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.is_fixed)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.is_fixed)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.starts_at)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.starts_at)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.expires_at)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.expires_at)
+                        </dd>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.condition)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.condition)
+                        </dd>
+
+                    </dl>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

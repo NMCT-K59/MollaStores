@@ -1,0 +1,219 @@
+﻿@model List<Model.ViewModel.ProductViewModel>
+@{
+    var listCategory = (List<Model.EntityFramework.ProductCategory>)ViewBag.ListCategory;
+    var listProduct = (List<Model.EntityFramework.Product>)ViewBag.ListProduct;
+}
+
+<style>
+    .setHeight {
+        height: 215.34px !important;
+    }
+    .textTruncate {
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+    }
+</style>
+<div class="container top">
+    <div class="heading heading-flex mb-3">
+        <div class="heading-left">
+            <h2 class="title">Top Selling Products</h2><!-- End .title -->
+        </div><!-- End .heading-left -->
+
+        <div class="heading-right">
+            <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="top-all-link" data-toggle="tab" href="#top-all-tab" role="tab" aria-controls="top-all-tab" aria-selected="true">All</a>
+                </li>
+                @if (ViewBag.ListCategory != null)
+                {
+                    foreach (var item in listCategory)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" id="@item.MetaTitle" data-toggle="tab" href="#@item.MetaTitle-tab" role="tab" aria-controls="@item.MetaTitle-tab" aria-selected="false">@item.Name</a>
+                        </li>
+                    }
+                }
+
+
+            </ul>
+        </div><!-- End .heading-right -->
+    </div><!-- End .heading -->
+
+    <div class="tab-content tab-content-carousel just-action-icons-sm">
+        <div class="tab-pane p-0 fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
+            <div class="owl-carousel owl-full carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                 data-owl-options='{
+                                "nav": true,
+                                "dots": false,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":5
+                                    }
+                                }
+                            }'>
+                @foreach (var item in Model.Take(10))
+                {
+
+
+                    <div class="product product-2">
+                        <figure class="product-media">
+                            @if (item.PromotionPrice > 0)
+                            {<span class="product-label label-circle label-new">Sale</span>
+                            }
+                            
+                            <a href="/product/detail/@item.ID">
+                                <img src="@item.Image" alt="@item.Detail" style="object-fit: cover; object-position: center" class="product-image setHeight">
+                            </a>
+
+                            <div class="product-action-vertical">
+                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            </div><!-- End .product-action -->
+
+                            <div class="product-action product-action-dark">
+                                <a data-id="@item.ID" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                            </div><!-- End .product-action -->
+                        </figure><!-- End .product-media -->
+
+                        <div class="product-body">
+                            <div class="product-cat">
+                                <a href="#">@item.CategoryName</a>
+                            </div><!-- End .product-cat -->
+                            <h3 class="product-title textTruncate"><a href="/product/detail/@item.ID">@item.Name</a></h3><!-- End .product-title -->
+                            @if (item.PromotionPrice > 0)
+                            {
+                                <div class="d-flex align-center">
+                                    <div class="product-price" style="text-decoration: line-through; color: #929292">
+                                        $@item.Price
+                                    </div><!-- End .product-price -->
+                                    <div class="product-price ml-2">
+                                        $@item.PromotionPrice
+                                    </div><!-- End .product-price -->
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="product-price">
+                                    $@item.Price
+                                </div><!-- End .product-price -->
+
+                            }
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" style="width: @(item.Rating/5*100)%;"></div><!-- End .ratings-val -->
+                                </div><!-- End .ratings -->
+                                <span class="ratings-text">( @(item.CountRating != null ? item.CountRating : 0) Reviews )</span>
+                            </div><!-- End .rating-container -->
+                        </div><!-- End .product-body -->
+                    </div>
+                }
+
+            </div><!-- End .owl-carousel -->
+        </div><!-- .End .tab-pane -->
+        @foreach (var it in listCategory)
+        {
+            <div class="tab-pane p-0 fade" id="@it.MetaTitle-tab" role="tabpanel" aria-labelledby="@it.MetaTitle">
+                <div class="owl-carousel owl-full carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                     data-owl-options='{
+                                "nav": true,
+                                "dots": false,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "480": {
+                                        "items":2
+                                    },
+                                    "768": {
+                                        "items":3
+                                    },
+                                    "992": {
+                                        "items":4
+                                    },
+                                    "1200": {
+                                        "items":5
+                                    }
+                                }
+                            }'>
+                    @foreach (var item in Model)
+                    {
+                        if (item.CategoryID == it.ID)
+                        {
+                            <div class="product product-2">
+                                <figure class="product-media">
+                                    @if (item.PromotionPrice > 0)
+                                    {<span class="product-label label-circle label-new">Sale</span>
+                                    }
+                                    <a href="/product/detail/@item.ID">
+                                        <img src="@item.Image" alt="@item.Detail" class="product-image setHeight">
+                                    </a>
+
+                                    <div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                    </div><!-- End .product-action -->
+
+                                    <div class="product-action product-action-dark">
+                                        <a data-id="@item.ID" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+
+                                <div class="product-body">
+                                    <div class="product-cat">
+                                        <a href="#">@item.CategoryName</a>
+                                    </div><!-- End .product-cat -->
+                                    <h3 class="product-title textTruncate"><a href="/product/detail/@item.ID">@item.Name</a></h3><!-- End .product-title -->
+                                    @if (item.PromotionPrice > 0)
+                                    {
+                                        <div class="d-flex align-center">
+                                            <div class="product-price" style="text-decoration: line-through; color: #929292">
+                                                $@item.Price
+                                            </div><!-- End .product-price -->
+                                            <div class="product-price ml-2">
+                                                $@item.PromotionPrice
+                                            </div><!-- End .product-price -->
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="product-price">
+                                            $@item.Price
+                                        </div><!-- End .product-price -->
+
+                                    }
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width: @(item.Rating/5*100)%;"></div><!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+                                        <span class="ratings-text">( @(item.CountRating != null ? item.CountRating : 0) Reviews )</span>
+                                    </div><!-- End .rating-container -->
+                                </div><!-- End .product-body -->
+                            </div>
+                        }
+                    }
+                </div><!-- End .owl-carousel -->
+            </div><!-- .End .tab-pane -->
+        }
+    </div><!-- End .tab-content -->
+</div><!-- End .container -->

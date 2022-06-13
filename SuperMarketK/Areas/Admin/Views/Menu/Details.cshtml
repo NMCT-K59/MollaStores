@@ -1,0 +1,86 @@
+﻿@model Model.EntityFramework.Menu
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex">
+    <h3 class="mr-auto p-2">THÔNG TIN MENU</h3>
+    <div class="p-2">@Html.ActionLink("Sửa thông tin", "Edit", new { id = Model.ID }, new { @class = "btn btn-success" })</div>
+    <div class="p-2">@Html.ActionLink("Back", "Index", null, new { @class = "btn btn-danger" })</div>
+</div>
+<style>
+    dt {
+        margin: 3px 0px;
+    }
+</style>
+
+<div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
+        </div>
+        <div class="card-body">
+            <div class="container d-flex justify-content-center">
+                <div class="form-horizontal col-md-10">
+   
+                        <dl>
+                            <dt>
+                                Tên menu
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Text, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                Liên kết
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Link, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                Thứ tự hiển thị
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.DisplayOrder, new { @class = "form-control border-left-primary" })
+                            </dd>
+                            <dt>
+                                Targer
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Target, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                Trạng thái
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Status, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                Loại menu
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.TypeID, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                        </dl>
+                    
+              
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

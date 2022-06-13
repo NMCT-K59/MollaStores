@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "System Config";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var logo = (Model.EntityFramework.SystemConfig)ViewBag.Logo;
+}
+
+<div class="d-flex">
+    <h2 class="mr-auto p-2">GENERAL CONFIGURATION</h2>
+</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">LOGO</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <img src="@logo.Value" alt="@logo.Name" class="img-thumbnail">
+            </div>
+            <div class="col-sm-8">
+                @using (Html.BeginForm("EditLogo", "SystemConfig", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="control-label col-sm-2">Link</label>
+                            <div class="col">
+                                <input type="text" value="@logo.Value" name="link" class="col-lg-offset-3 form-control border-left-primary border-left-primary" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="control-label col-sm-2">Replace</label>
+                            <div class="col">
+                                <input type="text" value="@logo.Name" name="name" class="col-lg-offset-3 form-control border-left-primary border-left-primary" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="control-label col-sm-2">Upload Image</label>
+                            <input type="file" name="img" style="padding-left: 12px" class="col-lg-offset-3" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="control-label col-sm-2"></label>
+                            <div class="col-lg-offset-3" style="padding-left: 12px">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

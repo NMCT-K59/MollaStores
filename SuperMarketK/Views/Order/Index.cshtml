@@ -1,0 +1,93 @@
+﻿@model Model.EntityFramework.Order
+@{
+    ViewBag.Title = "Kiểm tra đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    string tinhTrang = "Order successfull";
+    string value = "25%";
+    if (Model.StatusDelivery == 1)
+    {
+        tinhTrang = "Checking and packing";
+        value = "50%";
+    }
+    else if (Model.StatusDelivery == 2)
+    {
+        tinhTrang = "Tranfer to shipper";
+        value = "75%";
+    }
+    else if (Model.StatusDelivery == 3)
+    {
+        tinhTrang = "delivered";
+        value = "100%";
+    }
+}
+
+<div class="container" style="margin-top: 20px; margin-bottom: 20px; border: 1px solid #efefef">
+    <div class="row">
+        <div class="col-sm-4" style="background-color: #fbfff3;padding: 20px 10px; height: 349.8px">
+            <div class="space_bottom_20">
+                <div class="space_bottom_5">
+                    <b>ID Orders: </b> @Model.ID
+                </div>
+                <div class="space_bottom_5">
+                    <b>Order date: </b> @Model.CreatedDate
+                </div>
+                <div class="space_bottom_5">
+                    <b>Status: </b> @(Model.Status == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                </div>
+            </div>
+            <hr />
+            <div class="space_bottom_10">
+                <div class="space_bottom_5">
+                    <b>Receiver </b> <br />
+                    Fullname: @Model.ShipName <br />
+                    Phone: @Model.ShipMobile <br />
+                    Address:
+                    @Model.ShipAddress
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8" style="padding: 20px 10px">
+            <div class="space_bottom_5" style="margin-bottom: 10px">
+                <b>Order status: </b>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar" role="progressbar" style="width: @value;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">@tinhTrang</div>
+            </div>
+            <table class="timetable_sub table">
+                <thead>
+                    <tr>
+                        <th width="10%">ID</th>
+                        <th width="20%">Product</th>
+                        <th width="10%">Quantity</th>
+                        <th>Product name</th>
+                        <th width="10%">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListOrderDetail)
+                    {
+                        <tr class="rem1">
+                            <td class="invert">@(i++)</td>
+                            <td class="invert-image"><a href="single.html"><img src="@item.Product.Image" width="100" height="100" alt=" " class="img-responsive"></a></td>
+                            <td class="invert">
+                                @item.Quantity
+                            </td>
+                            <td class="invert">@item.Product.Name</td>
+                            <td class="invert" id="@item.Product.ID">@(item.Product.Price * item.Quantity)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div style="margin-top: 10px;padding: 10px 0px ;background-color: #f7f7f7; border-top: 1px solid #efefef;">
+                <div class="space_bottom_10 text-right mr-2" style="text-align: right;">
+                    <b>Total:</b> $@Model.ListOrderDetail.Sum(x => x.Quantity * x.Product.Price).GetValueOrDefault().ToString("N0")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

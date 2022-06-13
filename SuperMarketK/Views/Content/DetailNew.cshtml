@@ -1,0 +1,315 @@
+﻿@model Model.EntityFramework.Content
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Model.EntityFramework.Content> listXemNhieu = (List<Model.EntityFramework.Content>)ViewBag.ListXemNhieu;
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<head>
+    <style>
+        p {
+            font-size: 1.3rem
+        }
+
+        .image_pro {
+            width: 50px;
+            height: 50px;
+        }
+
+            .image_pro img {
+                width: 50px;
+                height: 50px;
+            }
+
+        .hopchua, .infocomment {
+            display: flex;
+        }
+
+        .infocomment {
+            flex-direction: column;
+        }
+
+            .infocomment span {
+                padding-left: 10px;
+            }
+
+        .profile_name {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .date_time {
+            color: rgb(172, 172, 172);
+        }
+
+        .evaluate {
+            font-size: 1.1rem;
+        }
+
+        .comment {
+            width: 500px;
+        }
+
+        .form-submit {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name, #content {
+            width: 100%;
+            padding: 4px;
+            border-radius: 3px;
+            box-shadow: 1px 1px 3px 2px #e7e6e6;
+            border: 1px solid #b1afaf;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: #333333;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .name {
+            margin-bottom: 5px;
+            height: 20px;
+        }
+
+            .name:hover, #content:hover {
+                box-shadow: 1px 1px 5px 1px #67c3e7;
+            }
+
+        ._2tga._8j9w {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/Assets/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Default With Sidebar<span>Single Post</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/Content/Index">Blog</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Default With Sidebar</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9">
+                    <article class="entry single-entry">
+                        <figure class="entry-media">
+                            <img src="@Model.Image" alt="image desc">
+                        </figure><!-- End .entry-media -->
+
+                        <div class="entry-body">
+                            <div class="entry-meta">
+                                <span class="entry-author">
+                                    by <a href="#">@Model.CreatedBy</a>
+                                </span>
+                                <span class="meta-separator">|</span>
+                                <a href="#">@Model.CreatedDate.Value.ToString("dd/MM/yyyy")</a>
+                                <span class="meta-separator">|</span>
+                                <a href="#">@Model.ViewCount Views</a>
+                            </div><!-- End .entry-meta -->
+
+                            <h2 class="entry-title">
+                                @Model.Name
+                            </h2><!-- End .entry-title -->
+
+                            <div class="entry-content editor-content">
+                                @Html.Raw(Model.Detail)
+                            </div><!-- End .entry-content -->
+
+                            <div class="entry-footer row no-gutters flex-column flex-md-row">
+                                <div class="col-md">
+                                    <!--<div class="entry-tags">
+                                        <span>Tags:</span> <a href="#">photography</a> <a href="#">style</a>
+                                    </div>-->
+                                    <!-- End .entry-tags -->
+                                </div><!-- End .col -->
+
+                                <div class="col-md-auto mt-2 mt-md-0">
+                                    <div class="social-icons social-icons-color">
+                                        <span class="social-label">Share this post:</span>
+                                        <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                                        <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                                        <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                                        <a href="#" class="social-icon social-linkedin" title="Linkedin" target="_blank"><i class="icon-linkedin"></i></a>
+                                    </div><!-- End .soial-icons -->
+                                </div><!-- End .col-auto -->
+                            </div><!-- End .entry-footer row no-gutters -->
+                        </div><!-- End .entry-body -->
+
+                    </article><!-- End .entry -->
+
+                    <div id="app" style="padding: 0 32px;">
+                        <div>
+                            <h1 style="font-size: 1.7rem;"><small class="pull-right">{{comments.length}} comments</small> Comments </h1>
+                        </div>
+                        <div class="comments-list">
+                            <div class="media" v-for="com in comments">
+                                <div class="comment">
+                                    <div class="hopchua">
+                                        <div class="image_pro">
+                                            <img src="~/Assets/vendor/images/avt.png" alt="Profile">
+                                        </div>
+                                        <div class="info">
+                                            <div class="infocomment">
+                                                <span class="profile_name">{{com.Name}}</span>
+                                                <span class="date_time">{{com.CreatedDate}}</span>
+                                                <span class="evaluate">{{com.Message}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                            </div>
+                        </div>
+                        <div>
+                            <br />
+                            <p style="margin-bottom: 8px">Leave a your comment</p>
+                            <div>
+                                <form onsubmit="return false;">
+                                    <input type="text" id="Name" placeholder="Name" v-model="comment.Name" class="form-control" required />
+                                    <input type="text" id="Email" placeholder="Email" v-model="comment.Email" class="form-control" style="margin-top: 8px" required />
+                                    <textarea rows="5" style="margin: 8px 0px;" placeholder="Comment" id="Body" v-model="comment.Message" class="form-control" required></textarea>
+                                    <button class="btn btn-success" style="margin-bottom: 8px; padding: 8px 30px" v-on:click="submit_comment()" id="btnSubmitComment">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End .col-lg-9 -->
+
+                <aside class="col-lg-3">
+                    <div class="sidebar">
+                        <div class="widget">
+                            <h3 class="widget-title">Popular Posts</h3><!-- End .widget-title -->
+
+                            <ul class="posts-list">
+                                @foreach (var item in listXemNhieu)
+                                {
+                                    <li>
+                                        <figure>
+                                            <a href="@("/blog/" + @item.MetaTitle + "--" + item.ID)">
+                                                <img src="@item.Image" alt="post">
+                                            </a>
+                                        </figure>
+
+                                        <div>
+                                            <span>@item.CreatedDate.Value.ToString("dd/MM/yyyy")</span>
+                                            <h4><a href="@("/blog/" + @item.MetaTitle + "--" + item.ID)">@item.Name</a></h4>
+                                        </div>
+                                    </li>
+                                }
+                            </ul><!-- End .posts-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .sidebar sidebar-shop -->
+                </aside><!-- End .col-lg-3 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            comments: [],
+            comment: {
+                Name: '',
+                Message: '',
+                Email: '',
+                CreatedDate: '',
+                PostID: @Model.ID,
+            }
+        },
+        created: function() {
+            this.get_comments();
+            this.listen();
+        },
+        methods: {
+            get_comments: function() {
+                axios.get('@Url.Action("Comments", "Content", new { id = @Model.ID }, protocol: Request.Url.Scheme)')
+                    .then((response) => {
+                        this.comments = response.data;
+                        for (var i = 0; i < this.comments.length; i++) {
+                            var date = new Date(parseInt(this.comments[i].CreatedDate.substr(6)));
+                            var dateStr =
+                                ("00" + date.getDate()).slice(-2) + "/" +
+                                ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+                                date.getFullYear() + " " +
+                                ("00" + date.getHours()).slice(-2) + ":" +
+                                ("00" + date.getMinutes()).slice(-2) + ":" +
+                                ("00" + date.getSeconds()).slice(-2);
+                            this.comments[i].CreatedDate = dateStr;
+                        }
+                    });
+            },
+            listen: function() {
+                @*my_channel.bind("asp_event", (data) => {
+                    if ((data.Email != "" && data.Name != "" && data.Message != "") && data.PostID == this.comment.PostID) {
+                        var date = new Date();
+                        var dateStr =
+                            ("00" + date.getDate()).slice(-2) + "/" +
+                            ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+                            date.getFullYear() + " " +
+                            ("00" + date.getHours()).slice(-2) + ":" +
+                            ("00" + date.getMinutes()).slice(-2) + ":" +
+                            ("00" + date.getSeconds()).slice(-2);
+                        data.CreatedDate = dateStr;
+                        this.comments.push(data);
+                    }
+                })*@
+            },
+            submit_comment: function() {
+                axios.post('@Url.Action("Comment", "Content", new {}, protocol: Request.Url.Scheme)', this.comment)
+                    .then((response) => {
+                        this.comment.Name = '';
+                        this.comment.Message = '';
+                        this.comment.Email = '';
+                    });
+            }
+        }
+    });
+</script>
+<!-- js -->
+
+@section jsFooter{
+    <script src="~/Scripts/jquery.signalR-2.4.2.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+    $(function () {
+        var chat = $.connection.chat;
+        loadClient();
+        $.connection.hub.start().done(function () {
+            $('#btnSubmitComment').click(function () {
+                var msg = $('#Body').val();
+                var name = $('#Name').val();
+                chat.server.message(msg, name);
+            });
+        });
+        function loadClient() {
+            chat.client.message = function (msg, name) {
+                var date = new Date();
+                var dateStr =
+                    ("00" + date.getDate()).slice(-2) + "/" +
+                    ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+                    date.getFullYear() + " " +
+                    ("00" + date.getHours()).slice(-2) + ":" +
+                    ("00" + date.getMinutes()).slice(-2) + ":" +
+                    ("00" + date.getSeconds()).slice(-2);
+                var ngayDang = dateStr;
+                $('.comments-list').append("<div class='media' v-for='com in comments'> <div class='comment'> <div class='hopchua'> <div class='image_pro'> <img src='/Assets/vendor/images/avt.png' alt='Profile'> </div> <div class='info'> <div class='infocomment'> <span class='profile_name'>" + name + "</span> <span class='date_time'>" + ngayDang + "</span> <span class='evaluate'>" + msg + "</span> </div> </div> </div> </div> <hr /> </div>");
+            }
+        }
+    });
+    </script>
+}
+

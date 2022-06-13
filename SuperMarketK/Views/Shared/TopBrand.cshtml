@@ -1,0 +1,93 @@
+﻿@model List<Model.ViewModel.ProductViewModel>
+<style>
+    .setHeight1 {
+        height: 275px !important;
+    }
+
+    .textTruncate {
+        word-break: break-all;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+    }
+</style>
+<div class="tab-pane p-0 fade" id="products-top-tab" role="tabpanel" aria-labelledby="products-top-link">
+    <div class="owl-carousel owl-full carousel-equal-height carousel-with-shadow" data-toggle="owl"
+         data-owl-options='{
+                                "nav": true,
+                                "dots": true,
+                                "margin": 20,
+                                "loop": false,
+                                "responsive": {
+                                    "0": {
+                                        "items":2
+                                    },
+                                    "600": {
+                                        "items":2
+                                    },
+                                    "992": {
+                                        "items":3
+                                    },
+                                    "1200": {
+                                        "items":4
+                                    }
+                                }
+                            }'>
+        @foreach (var item in Model)
+        {
+            <div class="product product-2">
+                <figure class="product-media">
+                    @if (item.PromotionPrice > 0)
+                    {<span class="product-label label-circle label-new">Sale</span>
+                    }
+                    <a href="/product/detail/@item.ID">
+                        <img src="@item.Image" alt="@item.Detail" class="product-image setHeight1">
+                    </a>
+
+                    <div class="product-action-vertical">
+                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                    </div><!-- End .product-action -->
+
+                    <div class="product-action product-action-dark">
+                        <a data-id="@item.ID" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                    </div><!-- End .product-action -->
+                </figure><!-- End .product-media -->
+
+                <div class="product-body">
+                    <div class="product-cat">
+                        <a href="#">@item.CategoryName</a>
+                    </div><!-- End .product-cat -->
+                    <h3 class="product-title textTruncate"><a href="/product/detail/@item.ID">@item.Name</a></h3><!-- End .product-title -->
+                    @if (item.PromotionPrice > 0)
+                    {
+                <div class="d-flex align-center">
+                    <div class="product-price" style="text-decoration: line-through; color: #929292">
+                        $@item.Price
+                    </div><!-- End .product-price -->
+                    <div class="product-price ml-2">
+                        $@item.PromotionPrice
+                    </div><!-- End .product-price -->
+                </div>
+
+                    }
+                    else
+                    {
+                        <div class="product-price">
+                            $@item.Price
+                        </div><!-- End .product-price -->
+
+                    }
+
+                    <div class="ratings-container">
+                        <div class="ratings">
+                            <div class="ratings-val" style="width: @(item.Rating/5*100)%;"></div><!-- End .ratings-val -->
+                        </div><!-- End .ratings -->
+                        <span class="ratings-text">( @(item.CountRating != null ? item.CountRating : 0) Reviews )</span>
+                    </div><!-- End .rating-container -->
+                </div><!-- End .product-body -->
+            </div><!-- End .product -->}
+    </div><!-- End .owl-carousel -->
+</div><!-- .End .tab-pane -->

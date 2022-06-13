@@ -1,0 +1,148 @@
+﻿@model IEnumerable<SuperMarketK.Models.UserOrderModel>
+
+@{
+    ViewBag.Title = "Lịch sử mua hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .row {
+        margin: 7px -10px;
+    }
+
+    .block_menu_profile {
+        border-top: 3px solid #8bbea5;
+        border-left: 1px solid #e5e5e5;
+        border-right: 1px solid #e5e5e5;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .menu_profile {
+        width: 100%;
+        float: left;
+    }
+
+    .item_menu_profile.active {
+        background: #f7f7f7;
+        color: #ff6600;
+    }
+
+    .item_menu_profile {
+        padding: 7px 10px;
+        display: block;
+        position: relative;
+    }
+
+    .width_common {
+        width: 100%;
+        float: left;
+    }
+
+    .space_bottom_20 {
+        margin-bottom: 20px;
+    }
+
+    .title_profile_page {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: 700;
+        position: relative;
+        width: 100%;
+        float: left;
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-3  col-sm-3">
+            <div class="block_menu_profile space_bottom_20">
+                <div class="menu_profile width_common">
+                    <a href="/Customer" class="item_menu_profile">Account Info</a>
+                    <a href="/Customer/ChangePassword" class="item_menu_profile ">Change Password</a>
+                    <a href="/Customer/OrdersHistory" class="item_menu_profile active">History Order</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9">
+            <div class="width_common space_bottom_20">
+                <div class="title_profile_page">History Order</div>
+                @if (Model.Count() > 0)
+                {
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="thead-light">
+                            ID Order
+                        </th>
+                        <th>
+                            Buy Date
+                        </th>
+                        <th>
+                            Fullname
+                        </th>
+                        <th>
+                            ShipMobile
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                    @foreach (var item in Model)
+                    {
+                        string tinhTrang = "Order successfully";
+                        if (item.StatusDelivery == 1)
+                        {
+                            tinhTrang = "Checking and packing";
+                        }
+                        else if (item.StatusDelivery == 2)
+                        {
+                            tinhTrang = "Transfer to shipper";
+                        }
+                        else if (item.StatusDelivery == 3)
+                        {
+                            tinhTrang = "Delivered";
+                        }
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td>
+                                @item.CreatedDate.ToString("dd-MM-yyyy")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShipName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShipMobile)
+                            </td>
+                            <td>
+                                @item.TongTien.ToString("N0")
+                            </td>
+                            <td>
+                                @tinhTrang
+                            </td>
+                        </tr>
+                    }
+            </table>
+                }
+                else
+                {
+                    <div class="alert alert-primary" role="alert">
+                        Bạn chưa có đơn hàng nào
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

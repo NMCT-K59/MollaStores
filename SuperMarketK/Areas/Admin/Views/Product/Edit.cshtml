@@ -1,0 +1,162 @@
+﻿@model Model.EntityFramework.Product
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex">
+    <h2 class="p-2">CHỈNH SỬA SẢN PHẨM</h2>
+    <div class="ml-auto p-2">@Html.ActionLink("Back", "Index", null, new { @class = "btn btn-danger" })</div>
+</div>
+
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
+        </div>
+        <div class="card-body">
+            <div class="container d-flex justify-content-center">
+                <div class="form-horizontal col-md-10">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input hidden id="productId" value="@Model.ID" />
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control border-left-primary border-left-primary" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Detail, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Detail, 5, 40, new { @class = "form-control border-left-primary" })
+                            @Html.ValidationMessageFor(model => model.Detail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.TextAreaFor(model => model.Description, 5, 40, new { @class = "form-control border-left-primary", @id = "txtDetail" })
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryID, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.CategoryID, null, new { @class = "form-control border-left-primary" })
+                            @Html.ValidationMessageFor(model => model.CategoryID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control border-left-primary border-left-primary" } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PromotionPrice, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.PromotionPrice, new { htmlAttributes = new { @class = "form-control border-left-primary border-left-primary" } })
+                            @Html.ValidationMessageFor(model => model.PromotionPrice, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-5" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control border-left-primary border-left-primary" } })
+                            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-5">Image main</label>
+                        <div class="col-md-10">
+                            <input type="file" id="gallery-photo-add" onchange="readURL(this);" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name="ImageFileMain"  />
+                            <img src="@Model.Image" width="100" id="imgMain" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-5">Image sub 1</label>
+                        <div class="col-md-10">
+                            <input type="file" onchange="readURL(this);" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name="ImageFileSub1"  />
+                            <img src="" width="100" id="imgSub1"/>
+                        </div>
+
+                        <label class="control-label col-md-5">Image sub 2</label>
+                        <div class="col-md-10">
+                            <input type="file" onchange="readURL(this);" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name="ImageFileSub2"  />
+                            <img src="" width="100" id="imgSub2" />
+                        </div>
+
+                        <label class="control-label col-md-5">Image sub 3</label>
+                        <div class="col-md-10">
+                            <input type="file" onchange="readURL(this);" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name="ImageFileSub3"  />
+                            <img src="" width="100" id="imgSub3" />
+                        </div>
+
+                        @*<label class="control-label col-md-5">Image sub 4</label>
+                        <div class="col-md-10">
+                            <input type="file" onchange="readURL(this);" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" name="ImageFileSub4" required />
+                            <img src="" width="100" id="imgSub4" />
+                        </div>*@
+                    </div>
+
+                    <div class="form-group gallery clear" style="height: 200px"></div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-12">
+                            <input type="submit" value="Edit" class="btn btn-success" style="width:30%" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(this).next().attr('src', e.target.result).width(150).height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+<script>
+    CKEDITOR.replace("txtDetail");
+</script>
+@section jsFooter{
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '/Admin/Product/LoadImages',
+                type: 'GET',
+                data: {
+                    id: $('#productId').val()
+                },
+                dataType: 'json',
+                success: function (response) {
+                    var data = response.data;
+                    var html = '';
+                    $.each(data, function (i, item) {
+                        html += '<div style="float:left"><img src="' + item.Image + '" width="100" /></div>'
+                    });
+                    $('.gallery').html(html);
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Checking order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-center">
+    <h2 style="margin-top: 20px">Checking order</h2>
+</div>
+
+@using (Html.BeginForm("Search", "Order"))
+{
+    <div class="form-horizontal">
+        <div class="text-success d-flex justify-content-center" style="margin-bottom:10px">
+            @ViewBag.Message
+        </div>
+        <div class="form-group text-center">
+            @Html.TextBox("order_id", "", new { @size = "65", @placeholder = "Search Order Id" })
+        </div>
+        <div class="form-group">
+            <div class="d-flex justify-content-center">
+                <input type="submit" value="Submit" class="btn btn-primary btn-rounded" />
+            </div>
+        </div>
+    </div>
+}

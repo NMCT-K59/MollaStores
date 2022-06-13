@@ -1,0 +1,148 @@
+﻿@model SuperMarketK.Models.CardInfo
+@{
+    ViewBag.Title = "Cart";
+    var session = Session["CartSession"];
+    var listItem = new List<SuperMarketK.Models.CartItem>();
+    if (session != null)
+    {
+        listItem = (List<SuperMarketK.Models.CartItem>)session;
+    }
+}
+@section jsFooter{
+    <script src="/Assets/client/js/controller/cartController.js"></script>
+    <script src="/Assets/client/js/controller/addressController.js"></script>
+}
+
+@if (listItem.Count > 0)
+{
+    <main class="main">
+        <div class="page-header text-center" style="background-image: url('/Assets/assets/images/page-header-bg.jpg')">
+            <div class="container">
+                <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+            </div><!-- End .container -->
+        </div><!-- End .page-header -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
+        <div class="page-content">
+            <div class="cart">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <table class="table table-cart table-mobile">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in listItem)
+                                    {
+                                        <tr>
+                                            <td class="product-col">
+                                                <div class="product">
+                                                    <figure class="product-media">
+                                                        <a href="/product/detail/@item.product.ID">
+                                                            <img src="@item.product.Image" alt="Product image">
+                                                        </a>
+                                                    </figure>
+
+                                                    <h3 class="product-title">
+                                                        <a href="/product/detail/@item.product.ID">@item.product.Name - Size @item.Size</a>
+                                                    </h3><!-- End .product-title -->
+                                                </div><!-- End .product -->
+                                            </td>
+                                            <td class="price-col">$@item.product.Price</td>
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="form-control inputNumber" value="@item.Quantity" data-id="@item.product.ID" data-size="@item.Size" min="1" max="10" step="1" data-decimals="0" required>
+                                                </div><!-- End .cart-product-quantity -->
+                                            </td>
+                                            <td class="total-col" id="total-@item.product.ID-@item.Size">$@(item.product.Price*item.Quantity)</td>
+                                            <td class="remove-col"><button class="btn-remove" data-id="@item.product.ID" data-size="@item.Size"><i class="icon-close"></i></button></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table><!-- End .table table-wishlist -->
+
+                            <div class="cart-bottom">
+                                <div class="cart-discount">
+                                    <div class="input-group">
+                                        <input type="text" id="inputVoucher" class="form-control" required placeholder="coupon code">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-primary-2" id="btnSubmitVoucher" type="submit"><i class="icon-long-arrow-right"></i></button>
+                                        </div><!-- .End .input-group-append -->
+                                    </div><!-- End .input-group -->
+                                </div><!-- End .cart-discount -->
+
+
+                            </div><!-- End .cart-bottom -->
+                        </div><!-- End .col-lg-9 -->
+                        <aside class="col-lg-3">
+                            <div class="summary summary-cart">
+                                <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+
+                                <table class="table table-summary">
+                                    <tbody>
+                                        <tr class="summary-subtotal">
+                                            <td>Subtotal:</td>
+                                            <td id="summary-subtotal-all">$@listItem.Sum(x => x.Quantity * x.product.Price).GetValueOrDefault()</td>
+                                        </tr><!-- End .summary-subtotal -->
+                                        <tr class="summary-shipping-estimate">
+                                            <td>Discount<br> <a id="codeVoucher">NO COUPON</a></td>
+                                            <td id="valueVoucher">$0</td>
+                                        </tr><!-- End .summary-shipping-estimate -->
+                                        <tr class="summary-total">
+                                            <td>Total:</td>
+                                            <td id="summary-subtotal-getall">$@listItem.Sum(x => x.Quantity * x.product.Price).GetValueOrDefault()</td>
+                                        </tr><!-- End .summary-total -->
+                                    </tbody>
+                                </table><!-- End .table table-summary -->
+
+                                <a href="/Cart/Checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                            </div><!-- End .summary -->
+
+                            <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .cart -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+}
+else
+{
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <img class="rounded" width="80%" src="https://dbeautyloungeindia.com/wp-content/uploads/2021/05/nproduct.png" />
+    </div>
+</main>
+}
+
+

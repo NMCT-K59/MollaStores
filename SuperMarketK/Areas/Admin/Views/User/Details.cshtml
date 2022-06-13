@@ -1,0 +1,153 @@
+﻿@model Model.EntityFramework.User
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex">
+    <h3 class="mr-auto p-2">THÔNG TIN NGƯỜI DÙNG</h3>
+    <div class="p-2">@Html.ActionLink("Sửa thông tin", "Edit", new { id = Model.ID }, new { @class = "btn btn-success" })</div>
+    <div class="p-2">@Html.ActionLink("Back", "Index", null, new { @class = "btn btn-danger" })</div>
+</div>
+<style>
+    dt {
+        margin: 3px 0px;
+    }
+</style>
+
+<div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">General Information</h6>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <dl>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.UserName)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Password)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Password, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.GroupID)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.GroupID, new { @class = "form-control border-left-primary" })
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Name, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Address)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Address, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Phone)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Phone, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                        </dl>
+                    </div>
+                    <div class="col">
+                        <dl>
+                           
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ProvinceID)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.ProvinceID, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.DistrictID)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.DistrictID, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CreatedDate)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.CreatedDate, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.CreatedBy)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.CreatedBy, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ModifiedDate)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.ModifiedDate, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ModifiedBy)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.ModifiedBy, new { @class = "form-control border-left-primary" })
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </dt>
+
+                            <dd>
+                                @Html.TextBoxFor(model => model.Status, new { @class = "form-control border-left-primary" })
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

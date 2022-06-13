@@ -1,0 +1,106 @@
+﻿@model Model.EntityFramework.User
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .row {
+        margin: 7px -10px;
+    }
+
+    .block_menu_profile {
+        border-top: 3px solid #8bbea5;
+        border-left: 1px solid #e5e5e5;
+        border-right: 1px solid #e5e5e5;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .menu_profile {
+        width: 100%;
+        float: left;
+    }
+
+    .item_menu_profile.active {
+        background: #f7f7f7;
+        color: #ff6600;
+    }
+
+    .item_menu_profile {
+        padding: 7px 10px;
+        display: block;
+        position: relative;
+    }
+
+    .width_common {
+        width: 100%;
+        float: left;
+    }
+
+    .space_bottom_20 {
+        margin-bottom: 20px;
+    }
+    .title_profile_page {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: 700;
+        position: relative;
+        width: 100%;
+        float: left;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-3  col-sm-3">
+            <div class="block_menu_profile space_bottom_20">
+                <div class="menu_profile width_common">
+                    <a href="/Customer" class="item_menu_profile active">Account Info</a>
+                    <a href="/Customer/ChangePassword" class="item_menu_profile ">Change Password</a>
+                    <a href="/Customer/OrdersHistory" class="item_menu_profile ">History Order</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-9">
+            <div class="width_common space_bottom_20">
+                @using (Html.BeginForm("Save", "Customer", FormMethod.Post))
+                {
+                    @Html.HiddenFor(model => model.ID)
+                    <div class="title_profile_page">Info account</div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" value="@Model.UserName" placeholder="@Model.UserName" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Fullname</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", value = Model.Name })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Mobile</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Phone, new { @class = "form-control", value = Model.Phone })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", value = Model.Email })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                            @Html.TextBoxFor(x => x.Address, new { @class = "form-control", value = Model.Address })
+                        </div>
+                    </div>
+                    <button type="submit" class="col-sm-offset-2 btn btn-primary" style="margin-left: 150px">Xác nhận</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

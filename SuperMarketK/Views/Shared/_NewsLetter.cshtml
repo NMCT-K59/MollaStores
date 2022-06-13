@@ -1,0 +1,31 @@
+﻿<div class="newsletter">
+    <div class="container">
+        <div class="w3agile_newsletter_left">
+            <h3>Đăng kí nhận thông báo</h3>
+        </div>
+        <div class="w3agile_newsletter_right">
+            <input type="email" name="Email" id="emailUser" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required="">
+            <input type="submit" value="subscribe now" id="btnEmail">
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+</div>
+<script>
+    $('#btnEmail').off('click').on('click', function () {
+        var email = $('#emailUser').val();
+        $.ajax({
+            url: '/Contact/InsertMail',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                email: email
+            },
+            success: function (res) {
+                if (res.status == true) {
+                    $('#emailUser').val('');
+                    alert('Bạn sẽ nhận được thông tin khuyến mãi qua Email');
+                }
+            }
+        });
+    });
+</script>

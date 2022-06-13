@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #map {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+@section jsFooter{
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="/Assets/client/js/controller/contactController.js"></script>
+    <script>
+        function initMap() {
+            const mySchool = { lat: 10.845587, lng: 106.794632 };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 18,
+                center: mySchool,
+            });
+
+            const marker = new google.maps.Marker({
+                position: mySchool,
+                title: "Siêu Thị Mua Sắm K",
+                map: map,
+            });
+
+            const info = '<b>Siêu Thị Mua Sắm K</b>'
+                + '<br>Địa chỉ: 451 Lê Văn Việt, Tăng Nhơn Phú A, Quận 9, Thành Phố Hồ Chí Minh';
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: info,
+            });
+
+            marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+            });
+        }
+        initMap();
+    </script>
+
+}
+<!-- mail -->
+
+<div class="mail">
+    <div class="container mt-2">
+        <div class="page-header page-header-big text-center" style="background-image: url('/Assets/assets/images/contact-header-bg.jpg')">
+            <h1 class="page-title text-white">Contact us<span class="text-white">keep in touch with us</span></h1>
+        </div><!-- End .page-header -->
+    </div><!-- End .container -->
+    <div class="page-content pb-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-2 mb-lg-0">
+                    <h2 class="title mb-1">Contact Information</h2><!-- End .title mb-2 -->
+                    <p class="mb-3">Vestibulum volutpat, lacus a ultrices sagittis, mi neque euismod dui, eu pulvinar nunc sapien ornare nisl. Phasellus pede arcu, dapibus eu, fermentum et, dapibus sed, urna.</p>
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <div class="contact-info">
+                                <h3>The Office</h3>
+
+                                <ul class="contact-list">
+                                    <li>
+                                        <i class="icon-map-marker"></i>
+                                        70 Washington Square South New York, NY 10012, United States
+                                    </li>
+                                    <li>
+                                        <i class="icon-phone"></i>
+                                        <a href="tel:#">+92 423 567</a>
+                                    </li>
+                                    <li>
+                                        <i class="icon-envelope"></i>
+                                        <a href="mailto:#">info@Molla.com</a>
+                                    </li>
+                                </ul><!-- End .contact-list -->
+                            </div><!-- End .contact-info -->
+                        </div><!-- End .col-sm-7 -->
+
+                        <div class="col-sm-5">
+                            <div class="contact-info">
+                                <h3>The Office</h3>
+
+                                <ul class="contact-list">
+                                    <li>
+                                        <i class="icon-clock-o"></i>
+                                        <span class="text-dark">Monday-Saturday</span> <br>11am-7pm ET
+                                    </li>
+                                    <li>
+                                        <i class="icon-calendar"></i>
+                                        <span class="text-dark">Sunday</span> <br>11am-6pm ET
+                                    </li>
+                                </ul><!-- End .contact-list -->
+                            </div><!-- End .contact-info -->
+                        </div><!-- End .col-sm-5 -->
+                    </div><!-- End .row -->
+                </div><!-- End .col-lg-6 -->
+                <div class="col-lg-6">
+                    <h2 class="title mb-1">Got Any Questions?</h2><!-- End .title mb-2 -->
+                    <p class="mb-2">Use the form below to get in touch with the sales team</p>
+
+                    <form class="contact-form mb-3">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="cname" class="sr-only">Name</label>
+                                <input type="text" class="form-control" placeholder="Name *" name="Name" id="txtName" required="">
+                            </div><!-- End .col-sm-6 -->
+
+                            <div class="col-sm-6">
+                                <label for="cemail" class="sr-only">Email</label>
+                                <input type="email" class="form-control" name="Email" placeholder="Email *" id="txtEmail" required="">
+                            </div><!-- End .col-sm-6 -->
+                        </div><!-- End .row -->
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="cphone" class="sr-only">Phone</label>
+                                <input type="text" class="form-control" placeholder="Phone" name="Telephone" id="txtSDT" required="">
+                            </div><!-- End .col-sm-6 -->
+
+                            <div class="col-sm-6">
+                                <label for="csubject" class="sr-only">Address</label>
+                                <input type="text" class="form-control" placeholder="Address" name="Address" id="txtDiaChi" required="">
+                            </div><!-- End .col-sm-6 -->
+                        </div><!-- End .row -->
+
+                        <label for="cmessage" class="sr-only">Message</label>
+                        <textarea class="form-control" cols="30" rows="4" name="Message" id="txtTinNhan" required="" placeholder="Message *"></textarea>
+                        <button type="submit" id="btnSend" value="Submit" class="btn btn-outline-primary-2 btn-minwidth-sm">
+                            <span>SUBMIT</span>
+                            <i class="icon-long-arrow-right"></i>
+                        </button>
+                        <input type="reset" value="Clear" class="btn btn-primary btn-rounded">
+                    </form><!-- End .contact-form -->
+                </div><!-- End .col-lg-6 -->
+            </div><!-- End .row -->
+
+            <hr class="mt-4 mb-5">
+
+        </div><!-- End .container -->
+        <!--<div id="map"></div>--><!-- End #map -->
+    </div><!-- End .page-content -->
+</div>
+<div id="map">
+
+</div>
+<!-- //mail -->

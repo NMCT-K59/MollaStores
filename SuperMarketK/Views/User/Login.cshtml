@@ -1,0 +1,242 @@
+﻿@model SuperMarketK.Models.Login
+@using BotDetect.Web.Mvc;
+<link href="@BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl"
+      rel="stylesheet" type="text/css" />
+@{
+    MvcCaptcha registerCaptcha = new MvcCaptcha("registerCaptcha");
+    registerCaptcha.UserInputID = "CaptchaCode";
+}
+@{
+    ViewBag.Title = "Đăng Nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section jsFooter{
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script type="text/javascript">
+        var OAUTHURL = 'https://accounts.google.com/o/oauth2/auth?';
+        var VALIDURL = 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=';
+        var SCOPE = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
+        var CLIENTID = '611502825352-b4am823f2rir7sg4sqro2tm3cqdmpd0f.apps.googleusercontent.com';
+        var REDIRECT = 'https://localhost:44319/dang-nhap';
+        var LOGOUT = 'https://localhost:44319';
+        var TYPE = 'token';
+        var _url = OAUTHURL + 'scope=' + SCOPE + '&client_id=' + CLIENTID + '&redirect_uri=' + REDIRECT + '&response_type=' + TYPE;
+        var acToken;
+        var tokenType;
+        var expiresIn;
+        var user;
+        var loggedIn = false;
+
+        function login() {
+            var currentLocation = document.referrer;
+            var win = window.open(_url);
+            var pollTimer = window.setInterval(function () {
+                try {
+                    if (win.document.URL.indexOf(REDIRECT) != -1) {
+                        var url = win.document.URL;
+                        acToken = gup(url, 'access_token');
+                        tokenType = gup(url, 'token_type');
+                        expiresIn = gup(url, 'expires_in');
+                        getUserInfo();
+                        win.location.href = currentLocation;
+                        window.location.reload();
+                       // win.close();
+                       // window.history.back();
+                       // window.location.reload();
+                       // window.location = 'https://localhost:44319';
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }, 500);
+        }
+
+        function gup(url, name) {
+            namename = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+            var regexS = "[\\#&]" + name + "=([^&#]*)";
+            var regex = new RegExp(regexS);
+            var results = regex.exec(url);
+            if (results == null)
+                return "";
+            else
+                return results[1];
+        }
+
+        function getUserInfo() {
+            $.ajax({
+                url: 'https://www.googleapis.com/oauth2/v1/userinfo?access_token=' + acToken,
+                data: null,
+                success: function (resp) {
+                    user = resp;
+                },
+            });
+            $.ajax({
+                url: '/User/GoogleLogin',
+                type: 'GET',
+                dataType: "json",
+                data: {
+                    email: user.email,
+                    name: user.name
+                },
+                success: function () {
+                   // $('#infoAccount').html('<li><a href="/customer">' + user.email + '</a></li>');
+                },
+            });
+        }
+    </script>
+}
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Login</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('/Assets/assets/images/backgrounds/login-bg.jpg')">
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab" aria-controls="register-2" aria-selected="true">Register</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                            <form action="/User/Login" method="post">
+                                @if (ViewBag.MessageError != null)
+                                {
+                                    <label class="alert-danger">@ViewBag.MessageError</label>
+                                }
+                                <div class="form-group">
+                                    <label for="singin-email-2">Username or email address *</label>
+                                    <input type="text" class="form-control" id="singin-email-2" name="UserName" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="singin-password-2">Password *</label>
+                                    <input type="password" class="form-control" id="singin-password-2" name="PassWord" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>LOG IN</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+
+                                    @*<div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="signin-remember-2">
+                                            <label class="custom-control-label" for="signin-remember-2">Remember Me</label>
+                                        </div>*@<!-- End .custom-checkbox -->
+
+                                    <a href="/User/Forgotpassword" class="forgot-link">Forgot Your Password?</a>
+                                </div><!-- End .form-footer -->
+                            </form>
+                            <div class="form-choice">
+                                <p class="text-center">or sign in with</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a onclick="login()" class="btn btn-login btn-g">
+                                            <i class="icon-google"></i>
+                                            Login With Google
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                    <div class="col-sm-6">
+                                        <a href="/User/LoginFacebook" class="btn btn-login btn-f">
+                                            <i class="icon-facebook-f"></i>
+                                            Login With Facebook
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                        <div class="tab-pane fade" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+                            <form action="/User/Register" method="post">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <label for="register-email-2">User name *</label>
+                                    <input type="text" class="form-control" name="UserName" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-email-2">Full name *</label>
+                                    <input type="text" class="form-control" name="Name" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-email-2">Address *</label>
+                                    <input type="text" class="form-control" name="Address" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-email-2">Phone *</label>
+                                    <input type="text" class="form-control" name="Phone" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-email-2">Your email address *</label>
+                                    <input type="email" class="form-control" name="Email" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-password-2">Confirm Password *</label>
+                                    <input type="password" class="form-control" name="ConfirmPassWord" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-password-2">Password *</label>
+                                    <input type="password" class="form-control" name="PassWord" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    @Html.Captcha(registerCaptcha)
+                                    <br />
+                                    @Html.TextBox("CaptchaCode", null, new { placeholder = "Type captcha" })
+                                </div><!-- End .form-group -->
+
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>SIGN UP</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
+                                        <label class="custom-control-label" for="register-policy-2">I agree to the <a href="#">privacy policy</a> *</label>
+                                    </div><!-- End .custom-checkbox -->
+                                </div><!-- End .form-footer -->
+                            </form>
+                            <div class="form-choice">
+                                <p class="text-center">or sign in with</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a onclick="login()" class="btn btn-login btn-g">
+                                            <i class="icon-google"></i>
+                                            Login With Google
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                    <div class="col-sm-6">
+                                        <a href="/User/LoginFacebook" class="btn btn-login  btn-f">
+                                            <i class="icon-facebook-f"></i>
+                                            Login With Facebook
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div><!-- End .form-box -->
+        </div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+</main><!-- End .main -->

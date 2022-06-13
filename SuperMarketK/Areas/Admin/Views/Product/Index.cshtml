@@ -1,0 +1,108 @@
+﻿@model PagedList.IPagedList<Model.EntityFramework.Product>
+@using PagedList.Mvc
+@using Model.EntityFramework;
+@{
+    ViewBag.Title = "Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    string statusDelete = ViewBag.GroupID == "ADMIN" ? "enable" : "disabled";
+    SuperMarketKDbContext db = new SuperMarketKDbContext();
+}
+@section jsFooter{
+    <script src="~/Assets/js/sb-admin-2.js"></script>
+}
+
+<div class="d-flex">
+    <h2 class="mr-auto p-2">Product List</h2>
+    <div class="p-2">@Html.ActionLink("Create new", "Create", null, new { @class = "btn btn-success" })</div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Table Product</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead class="thead-light">
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Discount
+                        </th>
+                        <th>
+                            Inventory
+                        </th>
+                        <th width="15%">
+                            Created by
+                        </th>
+                        <th width="10%">
+                            Aciton
+                        </th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in Model)
+                {
+                    <tr id="row_@item.ID">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @(db.ProductCategories.Find(item.CategoryID).Name)
+                        </td>
+                        <td>
+                            @item.Price
+                        </td>
+                        <td>
+                            @item.PromotionPrice
+                        </td>
+                        <td>
+                            @(item.Quantity > 0 ? item.Quantity.ToString() : "Đã hết hàng")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedBy)
+                        </td>
+                        <td style="text-align: center">
+                            @Html.ActionLink(" ", "Edit", new { id = item.ID }, new { @style = "color: #28a745", @class = "btnEdit" })
+                            @Html.ActionLink(" ", "Details", new { id = item.ID }, new { @class = "btnDetail ml-1 mr-1" })
+                            @Ajax.ActionLink(" ", "Delete", new { id = item.ID }, new AjaxOptions
+                       {
+                           Confirm = "Bạn có muốn xóa bản ghi này?",
+                           OnComplete = "$('#row_" + @item.ID + "').remove()",
+                           HttpMethod = "Delete",
+                       }, new { @style = "color: #dc3545", @class = @statusDelete + " btnDelete" })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex flex-row-reverse">
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @keyword = @ViewBag.keyword }))
+
+</div>
+<script>$(".btnEdit").prepend("<i class='fa-solid fa-pen-to-square'></i> ");</script>
+<script>$(".btnDetail").prepend("<i class='fa-solid fa-eye'></i> ");</script>
+<script>$(".btnDelete").prepend("<i class='fa-solid fa-trash'></i> ");</script>s
+
+
+
+

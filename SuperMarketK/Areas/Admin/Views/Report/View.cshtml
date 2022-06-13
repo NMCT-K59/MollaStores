@@ -1,0 +1,47 @@
+﻿@*@model IEnumerable<SuperMarketK.Areas.Admin.Models.Report>*@
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+<h2 style="text-align:center">BÁO CÁO DOANH THU THEO SẢN PHẨM</h2>
+@*<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th
+        <th>
+            @Html.DisplayNameFor(model => model.SL)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DoanhThu)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SL)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DoanhThu)
+        </td>
+    </tr>
+}
+
+</table>*@

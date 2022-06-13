@@ -1,0 +1,574 @@
+﻿@model Model.ViewModel.ProductViewModel
+@{
+    ViewBag.Title = "Detail Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var listReview = (List<Model.ViewModel.ReviewProductViewModel>)ViewBag.ListReview;
+    var listRecommend = (List<Model.ViewModel.ProductViewModel>)ViewBag.ListRecommend;
+}
+<style>
+    .btn-cart:hover {
+        color: #666 !important;
+    }
+</style>
+<script src="/Assets/client/js/jquery-1.11.1.min.js"></script>
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+        <div class="container d-flex align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Products</a></li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container">
+            <div class="product-details-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="product-gallery product-gallery-vertical">
+                            <div class="row">
+                                <figure class="product-main-image">
+                                    <img id="product-zoom" src="@Model.Image" data-zoom-image="@Model.Image" alt="@Model.Name">
+
+                                    <a id="btn-product-gallery" class="btn-product-gallery">
+                                        <i class="icon-arrows"></i>
+                                    </a>
+                                </figure><!-- End .product-main-image -->
+
+                                <div id="product-zoom-gallery" class="product-image-gallery">
+                                    @if (Model.ListImages.Count > 0)
+                                    {
+                                        <a class="product-gallery-item active" data-image="@Model.ListImages[0].Image" data-zoom-image="@Model.ListImages[0].Image">
+                                            <img src="@Model.ListImages[0].Image" alt="product side">
+                                        </a>
+                                    }
+                                    @for (int i = 1; i < Model.ListImages.Count; i++)
+                                    {
+                                        <a class="product-gallery-item" data-image="@Model.ListImages[i].Image" data-zoom-image="@Model.ListImages[i].Image">
+                                            <img src="@Model.ListImages[i].Image" alt="product cross">
+                                        </a>
+                                    }
+                                </div><!-- End .product-image-gallery -->
+                            </div><!-- End .row -->
+                        </div><!-- End .product-gallery -->
+                    </div><!-- End .col-md-6 -->
+
+                    <div class="col-md-6">
+                        <div class="product-details">
+                            <h1 class="product-title">@Model.Name</h1><!-- End .product-title -->
+
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" style="width: @(Model.Rating/5*100)%;"></div><!-- End .ratings-val -->
+                                </div><!-- End .ratings -->
+                                @*<a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>*@
+                            </div><!-- End .rating-container -->
+
+                            @if (Model.PromotionPrice > 0)
+                            {
+                                <div class="d-flex align-center">
+                                    <div class="product-price" style="text-decoration: line-through; color: #929292 ">
+                                        $@Model.Price
+                                    </div>
+                                    <div class="product-price ml-2">
+                                        $@Model.PromotionPrice
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="product-price">
+                                    $@Model.Price
+                                </div>
+                            }
+                            <!-- End .product-price -->
+
+                            <div class="product-content">
+                                <p>@Model.Detail</p>
+                            </div><!-- End .product-content -->
+
+                            <div class="details-filter-row details-row-size">
+                                <label for="size">Size:</label>
+                                <div class="select-custom">
+                                    <select name="size" id="size" class="form-control">
+                                        <option value="s" selected="selected">Small</option>
+                                        <option value="m">Medium</option>
+                                        <option value="l">Large</option>
+                                        <option value="xl">Extra Large</option>
+                                    </select>
+                                </div><!-- End .select-custom -->
+                            </div><!-- End .details-filter-row -->
+                            <div class="details-filter-row details-row-size">
+                                <label for="qty">Qty:</label>
+                                <div class="product-details-quantity">
+                                    @if (@Model.Quantity <= 0)
+                                    {
+                                    <input type="number" id="qty" class="form-control" value="1" min="0" max="0" step="1" data-decimals="0" required>
+                                    }
+                                    else
+                                    {
+                                <input type="number" id="qty" class="form-control" value="1" min="1" max="@Model.Quantity" step="1" data-decimals="0" required>
+                                    }
+                                    
+                                </div><!-- End .product-details-quantity -->
+                                <div>
+                                    @if (@Model.Quantity <= 0)
+                                    {
+                                        <p class="ml-2">(Out of stock)</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="ml-2">(Left in stock: @Model.Quantity)</p>
+                                    }
+
+                                </div>
+                            </div><!-- End .details-filter-row -->
+
+                            <div class="product-details-action">
+                                <a data-id="@Model.ID" class="btn-product btn-cart btnAddItem" style="font-size: 1.4rem">ADD TO CART</a>
+                            </div><!-- End .product-details-action -->
+                            <div class="product-details-footer">
+                                <div class="product-cat">
+                                    <span>Category:</span>
+                                    <a href="/category/@Model.CategoryName">@Model.CategoryName</a>
+                                </div><!-- End .product-cat -->
+
+                                <div class="social-icons social-icons-sm">
+                                    <span class="social-label">Share:</span>
+                                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                                    <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                                </div>
+                            </div><!-- End .product-details-footer -->
+                        </div><!-- End .product-details -->
+                    </div><!-- End .col-md-6 -->
+                </div><!-- End .row -->
+            </div><!-- End .product-details-top -->
+
+            <div class="product-details-tab">
+                <ul class="nav nav-pills justify-content-center" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (@listReview.Count)</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+                        <div class="product-desc-content">
+                            @Html.Raw(Model.Description)
+                        </div><!-- End .product-desc-content -->
+                    </div><!-- .End .tab-pane -->
+                    <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
+                        <div class="reviews">
+                            <h3>Reviews (@listReview.Count)</h3>
+                            @foreach (var item in listReview)
+                            {
+                                <div class="review">
+                                    <div class="row no-gutters">
+                                        <div class="col-auto">
+                                            <h4><a href="#">@item.UserName</a></h4>
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: @((item.Rating/5)*100)%;"></div><!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                            <span class="review-date">@item.CreatedTime</span>
+                                        </div><!-- End .col -->
+                                        <div class="col">
+                                            <h4>@item.Title</h4>
+                                            <div class="review-content">
+                                                <p>@item.Comment</p>
+                                            </div><!-- End .review-content -->
+                                        </div><!-- End .col-auto -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .review -->
+                            }
+                        </div><!-- End .reviews -->
+                        <div class="boxReview">
+                            @if (ViewBag.IsBuyProduct == null)
+                            {
+                                <p>Please <a href="/user/login">login</a> to comment on this product</p>
+                            }
+                            else
+                            {
+                                if (ViewBag.IsBuyProduct == true)
+                                {
+
+                                    <span style="font-size: 3rem; text-align:center">Reviews</span>
+                                    <div class="row no-gutters d-flex justify-content-center">
+                                        <div class="row" style="width: 60%">
+                                            <div class="col-12 review-title">
+                                                <label style="font-size: 16px">Title</label>
+                                                <input type="text" onchange="checkValidateTitle()" aria-invalid="true" aria-describedby="title-error" class="form-control form-control-rounded mb-0" id="txtTitleReview" name="TitleReview">
+                                                <span role="alert" id="titleError" aria-hidden="true">
+                                                    Please enter Tiltle
+                                                </span>
+                                            </div>
+                                            <div class="col-12 review-content">
+                                                <label style="font-size: 16px">Review</label>
+                                                <textarea aria-invalid="true" onchange="checkValidateReview()" aria-describedby="review-error" rows="4" cols="50" class="form-control form-control-rounded mb-0" id="txtInputReview" name="InputReview"></textarea>
+                                                <span role="alert" id="inputReviewError" aria-hidden="true">
+                                                    Please enter Review
+                                                </span>
+                                            </div><!-- End .review-content -->
+                                        </div><!-- End .col-auto -->
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <form class="rating d-flex justify-content-center">
+                                            <label style="font-size: 24px">
+                                                <input type="radio" name="stars" value="1" />
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label style="font-size: 24px">
+                                                <input type="radio" name="stars" value="2" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label style="font-size: 24px">
+                                                <input type="radio" name="stars" value="3" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label style="font-size: 24px">
+                                                <input type="radio" name="stars" value="4" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label style="font-size: 24px">
+                                                <input type="radio" name="stars" value="5" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                        </form>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn btn-primary btn-rounded" type="submit" id="btnSubmitReview" data-id="@Model.ID">Submit</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p>Please purchase the product to be able to comment</p>
+                                }
+                            }
+                            <!-- End .row -->
+                        </div><!-- End .review -->
+                    </div><!-- .End .tab-pane -->
+                </div><!-- End .tab-content -->
+            </div><!-- End .product-details-tab -->
+
+            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+
+            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
+                 data-owl-options='{
+                            "nav": false,
+                            "dots": true,
+                            "margin": 20,
+                            "loop": false,
+                            "responsive": {
+                                "0": {
+                                    "items":1
+                                },
+                                "480": {
+                                    "items":2
+                                },
+                                "768": {
+                                    "items":3
+                                },
+                                "992": {
+                                    "items":4
+                                },
+                                "1200": {
+                                    "items":4,
+                                    "nav": true,
+                                    "dots": false
+                                }
+                            }
+                        }'>
+                @foreach (var item in listRecommend)
+                {
+                    <div class="product product-2">
+                        <figure class="product-media">
+                            <a href="/product/detail/@item.ID">
+                                <img src="@item.Image" alt="@item.Detail" class="product-image">
+                            </a>
+
+                            <div class="product-action-vertical">
+                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                            </div><!-- End .product-action -->
+
+                            <div class="product-action product-action-dark">
+                                <a data-id="@item.ID" class="btn-product btn-cart-2" title="Add to cart"><span>add to cart</span></a>
+                            </div><!-- End .product-action -->
+                        </figure><!-- End .product-media -->
+
+                        <div class="product-body">
+                            <div class="product-cat">
+                                <a href="#">@item.CategoryName</a>
+                            </div><!-- End .product-cat -->
+                            <h3 class="product-title"><a href="/product/detail/@item.ID">@item.Name</a></h3><!-- End .product-title -->
+                            <div class="product-price">
+                                @item.Price
+                            </div><!-- End .product-price -->
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                    <div class="ratings-val" style="width: @(item.Rating/5*100)%;"></div><!-- End .ratings-val -->
+                                </div><!-- End .ratings -->
+                                <span class="ratings-text">( @(item.CountRating != null ? item.CountRating : 0) Reviews )</span>
+                            </div><!-- End .rating-container -->
+                        </div><!-- End .product-body -->
+                    </div>
+                }
+            </div><!-- End .owl-carousel -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+@section jsFooter{
+    <script>
+        $('.btnAddItem').off('click').on('click', function () {
+            var size = $("#size option:selected").text();
+            $.ajax({
+                data: { productID: $(this).data('id'), quantity: $('#qty').val(), size: size },
+                url: '/Cart/AddItem',
+                dataType: 'json',
+                type: 'POST',
+                success: function (res) {
+                    if (res.status == true) {
+                        window.location.reload();
+                        // $(this).html("Added to cart");
+                        // $(this).attr('disabled', 'disabled');
+                        console.log("True");
+                    } else {
+                        console.log("False");
+                    }
+                }
+            })
+        });
+        let rating = 0;
+        $(':radio').change(function () {
+            rating = this.value;
+        });
+        $('#btnSubmitReview').off('click').on('click', function () {
+            $.ajax({
+                data: { productID: $(this).data('id'), Title: $('#txtTitleReview').val(), Review: $('#txtInputReview').val(), Rating: rating },
+                url: '/Product/CreateReview',
+                dataType: 'json',
+                type: 'POST',
+                complete: function (res) {
+                    var date = new Date();
+                    var dateStr =
+                        ("00" + date.getDate()).slice(-2) + "/" +
+                        ("00" + (date.getMonth() + 1)).slice(-2) + "/" +
+                        date.getFullYear() + " " +
+                        ("00" + date.getHours()).slice(-2) + ":" +
+                        ("00" + date.getMinutes()).slice(-2) + ":" +
+                        ("00" + date.getSeconds()).slice(-2);
+                    if (res.status == 200) {
+                        $('#txtTitleReview').val('');
+                        $('#txtInputReview').val('');
+                        $('.reviews').append(`<div class='review'><div class='row no-gutters'>    <div class='col-auto'>        <h4><a href='#'>${res.responseJSON.Name}</a></h4>        <div class='ratings-container'>            <div class='ratings'>                <div class='ratings-val' style='width: ${(res.responseJSON.data.Rating / 5) * 100}%'></div>            </div>        </div>        <span class='review-date'>${dateStr}</span>    </div>    <div class='col'>        <h4>${res.responseJSON.data.Title}</h4>        <div class='review-content'>            <p>${res.responseJSON.data.Comment}</p>        </div>    </div></div></div>`);
+                    } else {
+                        alert('some error')
+                    }
+                }
+            })
+        });
+    </script>
+    <script src="/Assets/assets/js/jquery.elevateZoom.min.js"></script>
+}
+<style>
+    .rating {
+        display: inline-block;
+        position: relative;
+        height: 50px;
+        line-height: 50px;
+        font-size: 50px;
+    }
+
+        .rating label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            cursor: pointer;
+        }
+
+            .rating label:last-child {
+                position: static;
+            }
+
+            .rating label:nth-child(1) {
+                z-index: 5;
+            }
+
+            .rating label:nth-child(2) {
+                z-index: 4;
+            }
+
+            .rating label:nth-child(3) {
+                z-index: 3;
+            }
+
+            .rating label:nth-child(4) {
+                z-index: 2;
+            }
+
+            .rating label:nth-child(5) {
+                z-index: 1;
+            }
+
+            .rating label input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+            }
+
+            .rating label .icon {
+                float: left;
+                color: transparent;
+            }
+
+            .rating label:last-child .icon {
+                color: #000;
+            }
+
+        .rating:not(:hover) label input:checked ~ .icon,
+        .rating:hover label:hover input ~ .icon {
+            color: #f1c40f;
+        }
+
+        .rating label input:focus:not(:checked) ~ .icon:last-child {
+            color: #000;
+            text-shadow: 0 0 5px #09f;
+        }
+
+    #titleError, #inputReviewError {
+        display: none;
+        font-size: 0.8em;
+    }
+
+        #titleError.visible, #inputReviewError.visible {
+            display: block;
+        }
+
+    input.invalid, textarea.invalid {
+        border-color: red;
+    }
+</style>
+<script>
+    const submit = document.getElementById("btnSubmitReview");
+
+    submit.addEventListener("click", validate);
+
+    function checkValidateTitle() {
+        $('#txtTitleReview').removeClass('invalid');
+        $('#titleError').removeClass('visible');
+        $('#titleError').setAttribute("aria-hidden", true);
+        $('#titleError').setAttribute("aria-invalid", false);
+    }
+
+    function checkValidateReview() {
+        $('#txtInputReview').removeClass('invalid');
+        $('#inputReviewError').removeClass('visible');
+        $('#inputReviewError').setAttribute("aria-hidden", true);
+        $('#inputReviewError').setAttribute("aria-invalid", false);
+    }
+
+    function validate(e) {
+        e.preventDefault();
+
+        const titleField = document.getElementById("txtTitleReview");
+        const inputReviewField = document.getElementById("txtInputReview");
+        let valid = true;
+
+        if (!titleField.value) {
+            const titleError = document.getElementById("titleError");
+            titleError.classList.add("visible");
+            titleField.classList.add("invalid");
+            titleError.setAttribute("aria-hidden", false);
+            titleError.setAttribute("aria-invalid", true);
+        }
+
+        if (!inputReviewField.value) {
+            const titleError = document.getElementById("inputReviewError");
+            titleError.classList.add("visible");
+            inputReviewField.classList.add("invalid");
+            titleError.setAttribute("aria-hidden", false);
+            titleError.setAttribute("aria-invalid", true);
+        }
+
+        return valid;
+    }
+</script>
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Choose size</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin: 10px 10px 0px 10px">
+                    <div class="col-10">
+                        <select name="size" id="sizeModal" class="form-control">
+                            <option value="s" selected="selected">Small</option>
+                            <option value="m">Medium</option>
+                            <option value="l">Large</option>
+                            <option value="xl">Extra Large</option>
+                        </select>
+                    </div>
+                    <div class="col-2">
+                        <input type="number" id="qtyModal" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="btnConfirm" value="" class="btn btn-success btn-block">Confirm</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", ".btn-cart-2", function () {
+        var itemId = $(this).data('id');
+        $(".modal-footer #btnConfirm").val(itemId);
+        // As pointed out in comments,
+        // it is unnecessary to have to manually call the modal.
+        $("#myModal").modal();
+    });
+    $('#btnConfirm').off('click').on('click', function () {
+        var size = $("#sizeModal option:selected").text();
+        $.ajax({
+            data: { productID: $(this).val(), quantity: $('#qtyModal').val(), size: size },
+            url: '/Cart/AddItem',
+            dataType: 'json',
+            type: 'POST',
+            success: function (res) {
+                if (res.status == true) {
+                    window.location.reload();
+                    var countCart = parseInt($("#cartCount").html());
+                    countCart++;
+                    $("#cartCount").html('' + countCart);
+                    $("#myModal").modal("hide");
+                    alert('Added to cart');
+                } else {
+                    $("#myModal").modal("hide");
+                    alert('Add cart fail');
+                }
+            }
+        })
+    });
+</script>

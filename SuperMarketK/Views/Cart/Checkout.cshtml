@@ -1,0 +1,205 @@
+﻿@model SuperMarketK.Models.CardInfo
+@{
+    ViewBag.Title = "Checkout";
+    var session = Session["CartSession"];
+    var listItem = new List<SuperMarketK.Models.CartItem>();
+    if (session != null)
+    {
+        listItem = (List<SuperMarketK.Models.CartItem>)session;
+    }
+}
+@section jsFooter{
+    <script src="/Assets/client/js/controller/cartController.js"></script>
+    <script src="/Assets/client/js/controller/addressController.js"></script>
+}
+
+@if (listItem.Count > 0)
+{
+    <main class="main">
+        <div class="page-header text-center" style="background-image: url('/Assets/assets/images/page-header-bg.jpg')">
+            <div class="container">
+                <h1 class="page-title">Checkout<span>Shop</span></h1>
+            </div><!-- End .container -->
+        </div><!-- End .page-header -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
+        <div class="page-content">
+            <div class="checkout">
+                <div class="container">
+                    <form action="/Cart/Payment" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>Fullname *</label>
+                                        <input type="text" class="form-control" name="name" required>
+                                    </div><!-- End .col-sm-6 -->
+
+                                    <div class="col-sm-6">
+                                        <label>Phone *</label>
+                                        <input type="text" class="form-control" name="mobile" required>
+                                    </div><!-- End .col-sm-6 -->
+                                </div><!-- End .row -->
+
+                                <label>Street address *</label>
+                                <div class="controls grid-v">
+                                    <div class="form-group">
+                                        <select id="ddlProvince" class="form-control" name="tinh">
+                                        </select>
+                                    </div>
+                                    @Html.Hidden("ProvinceName", null, new { @id = "ProvinceName" })
+                                    @Html.Hidden("huyen", null, new { @id = "huyen" })
+                                    @Html.Hidden("xa", null, new { @id = "xa" })
+                                    <div class="form-group">
+                                        <select id="ddlDistrict" class="form-control" name="huyen">
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <select id="ddlWard" class="form-control" name="xa">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.EditorFor(item => item.address, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter street name" } })
+                                    @Html.ValidationMessageFor(item => item.address, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="controls">
+                                    <div style="margin-bottom: 10px">
+                                        <label class="control-label">Payments: </label>
+                                    </div>
+                                    <div style="padding: 10px; border:1px solid #e7e7e7;margin-bottom: 20px">
+                                        <div class="form-check" style="margin-bottom: 10px">
+                                            <input class="form-check-label" type="radio" name="pay" value="false" id="flexRadioDefault1" checked>
+                                            <img class="method-icon" width="32" style="margin-right: 10px;display:inline"
+                                                 src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg" alt="cod">
+
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                <span>Payment on delivery</span>
+                                            </label>
+
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-label" type="radio" name="pay" value="true" id="flexRadioDefault2">
+                                            <img class="method-icon" width="32" style="margin-right: 10px; display: inline"
+                                                 src="https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-momo.svg" alt="momo">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Payment via Momo
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- End .col-lg-9 -->
+                            <aside class="col-lg-3">
+                                <div class="summary">
+                                    <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                                    <table class="table table-summary">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach (var item in listItem)
+                                            {
+                                                <tr>
+                                                    <td><a href="/product/detail/@item.product.ID">@item.product.Name</a></td>
+                                                    <td>$@(item.product.Price*item.Quantity)</td>
+                                                </tr>
+                                            }
+                                            <tr class="summary-subtotal">
+                                                <td>Subtotal:</td>
+                                                <td id="tienHang">$@listItem.Sum(x => x.Quantity * x.product.Price).GetValueOrDefault()</td>
+                                            </tr><!-- End .summary-subtotal -->
+                                            <tr>
+                                                <td>Shipping:</td>
+                                                <td id="txtShipment">Loading</td>
+                                            </tr>
+                                            <tr class="summary-total">
+                                                <td>Total:</td>
+                                                <td id="tongTien">$0</td>
+                                            </tr><!-- End .summary-total -->
+                                        </tbody>
+                                    </table><!-- End .table table-summary -->
+                                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                        <span class="btn-text">Place Order</span>
+                                        <span class="btn-hover-text">Proceed to Checkout</span>
+                                    </button>
+                                </div><!-- End .summary -->
+                            </aside><!-- End .col-lg-3 -->
+                        </div><!-- End .row -->
+                    </form>
+                </div><!-- End .container -->
+            </div><!-- End .checkout -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+}
+else
+{
+    <main class="main">
+        <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+            <div class="container">
+                <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+            </div><!-- End .container -->
+        </div><!-- End .page-header -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+        <div style="display: flex; align-items: center; justify-content: center;">
+            <img class="rounded" width="80%" src="https://dbeautyloungeindia.com/wp-content/uploads/2021/05/nproduct.png" />
+        </div>
+    </main>
+}
+<script src="/Assets/client/js/jquery-1.11.1.min.js"></script>
+<script>
+    var session = '@Request.RequestContext.HttpContext.Session["VoucherSession"]';
+    $(document).ready(function () {
+        $.ajax({
+            data: { voucher: session },
+            url: '/Cart/AddVoucher',
+            dataType: 'json',
+            type: 'POST',
+            success: function (res) {
+                if (res.status == true) {
+                    if (res.data.ResultObj.type == 1) {
+                        isFreeship = true;
+                        $('#txtShipment').html('Freeship');
+                    } else if (res.data.ResultObj.type == 2) {
+                        let value = $('#tienHang').html().substring(1);
+                        let newValue = parseInt(value) * res.data.ResultObj.discount_amount / 100;
+                        $('#txtShipment').parent().before('<tr><td>Discount:</td><td id="txtDiscount">' + newValue + '</td></tr>');
+                        $("#tongTien").html("$" + (value - newValue));
+                    } else if (res.data.ResultObj.type == 3) {
+                        let value = $('#tienHang').html().substring(1);
+                        $('#txtShipment').parent().before('<tr><td>Discount:</td><td id="txtDiscount">' + res.data.ResultObj.discount_amount + '</td></tr>');
+                        $("#tongTien").html("$" + (parseInt(value) - res.data.ResultObj.discount_amount));
+                    }
+                } else {
+                    console.log('No voucher apply');
+                }
+            }
+        })
+    });
+</script>
+
+
