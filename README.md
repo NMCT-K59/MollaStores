@@ -1,10 +1,10 @@
-# THỰC TẬP CHUYÊN MÔN NĂM HỌC 2020 - 2021
-Họ và tên: Đỗ Quốc Tuấn
+# ĐỒ ÁN TỐT NGHIỆP NĂM HỌC 2020 - 2021
+Họ và tên: Nguyễn Mai Chí Trung
      
 * Lớp: Công Nghệ Thông Tin K59
 
-## Đề tài: Quản Lý Siêu Thị
-Giảng viên: Thầy Nguyễn Lê Minh. 
+## Đề tài: Quản Lý Shop thương mai điện tử
+Giảng viên: Trần Thị Dung. 
 
 ## Phần 1: Công nghệ sử dụng:
 - DotNET Framework
