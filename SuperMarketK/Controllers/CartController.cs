@@ -380,7 +380,7 @@ namespace SuperMarketK.Controllers
                     string orderInfo = "Đơn hàng mới";
                     string returnUrl = ConfigurationManager.AppSettings["returnUrl"].ToString();
                     string notifyurl = ConfigurationManager.AppSettings["notifyUrl"].ToString();
-                    string amount = (tongTien + tienShip - discountVoucher).ToString();
+                    string amount = ((int)tongTien*23000 + tienShip - discountVoucher*23000).ToString();
                     string orderid = Guid.NewGuid().ToString();
                     string requestId = Guid.NewGuid().ToString();
                     string extraData = "";
